@@ -6,9 +6,8 @@ import java.util.ArrayList;
 
 public interface PartRepositoryInterface extends Remote {
     String listParts() throws RemoteException;
-    // String getPart() throws RemoteException;
-    // String showPartAttributes() throws RemoteException;
-    // String clearSubPartsList() throws RemoteException;
-    String addPart(String code, String name, String description) throws RemoteException;
+    String getPart(String partCode) throws RemoteException;
+    String showPartAttributes(String partCode) throws RemoteException;
+    String addPart(String code, String name, String description, HashMap<String, Integer> subParts) throws RemoteException;
     
 }

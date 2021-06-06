@@ -12,20 +12,18 @@ public class Client {
         InputStreamReader inputStreamReader = new InputStreamReader(System.in);
         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
         String[] input = {""};
-        // Map<String,Integer> subParts= new HashMap<String,Integer>();
+        HashMap<String,Integer> subParts = new HashMap<String,Integer>();
         String currentPartCode = null;
         PartRepositoryInterface partRepository = null;
 
-        System.out.println("Client is ready");
-
         try {
             while (true) {
+                System.out.println();
                 System.out.print("> ");
                 String rawInput = bufferedReader.readLine();
                 input = rawInput.split(" ");
 
                 if(input[0].equals("quit")) {
-                    System.out.println("Client was successfully quit");
                     break;
                 }
 
@@ -41,46 +39,50 @@ public class Client {
 
                     try {
                         partRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + serverName);
-                        System.out.println("Connected to " + serverName);
                     } catch (Exception e) {
-                        System.out.println("Error in connect to " + serverName);
+                        System.out.println("Can't connect to " + serverName);
                     }
                 }
+
                 else if(input[0].equals("listp")) {
-                    String parts = partRepository.listParts();
-
-                    System.out.println(parts);
-
-                    // for (String key : parts.keySet()) {
-                    //     String partCode = key.toString();
-                    //     System.out.println(key);
-                    // }
+                    try {
+                        System.out.println(partRepository.listParts());
+                    } catch (Exception e) {
+                        System.out.println("Client error");
+                    }
                 }
-                // else if(input[0].equals("getp")) {
-                //     String partName = bufferedReader.readLine();
-                //     boolean isPartFound = partRepository.getPart(partCode);                   
 
-                //     if (isPartFound) {
-                //         currentPart = partName;
-                //         System.out.println("Part with code " + partCode + " is found");
-                //     }
-                // }
-                // else if(input[0].equals("showp")) {
-                //     System.out.println(partRepository.showPart());
-                // }
-                // else if(input[0].equals("clearlist")) {
-                //     subPartesAtual.clear();
-                //     //partRepository.clearList();
-                //     //System.out.println("Subpart list cleaned");
-                // }
+                else if(input[0].equals("getp")) {
+                    try {
+                        String partCode = input[1];
+                        String result = partRepository.getPart(partCode);
+
+                        if (result.equals("Current part set as " + partCode) ) {
+                            currentPartCode = partCode;
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Client error");
+                    }
+                }
+
+                else if(input[0].equals("showp")) {
+                    try {
+                        System.out.println(partRepository.showPartAttributes(currentPartCode));
+                    } catch (Exception e) {
+                        System.out.println("Client error");
+                    }
+                }
+
+                else if(input[0].equals("clearlist")) {
+                    subParts.clear();
+                }
+
                 else if(input[0].equals("addsubpart")) {
-                    String code = input[1];
-                    String quantity = input[2];
+                    Integer quantity = Integer.valueOf(input[1]);
 
-                    subPartesAtual.put(currentPart, Integer.valueOf(quantity));
-                    //partRepository.addSubPart(quantity);
-                    System.out.println("Subpart added with success");
+                    subParts.put(currentPartCode, quantity);
                 }
+
                 else if(input[0].equals("addp")) {
                     // addp p4, Tabua de Ype, Tabua de Ype de 60cm x 100cm
                     String[] attributes = rawInput.split(", ");
@@ -88,7 +90,7 @@ public class Client {
                     String nome =  attributes[1];
                     String desc = attributes[2];
 
-                    String response = partRepository.addPart(code, nome, desc);
+                    String response = partRepository.addPart(code, nome, desc, subParts);
 
                     System.out.println(response);
                 }
@@ -97,7 +99,7 @@ public class Client {
                 }
             }
         } catch(Exception e) {
-            System.out.println("Error");
+            System.out.println("Client error");
             System.out.println(e);
         }
         System.exit(0);

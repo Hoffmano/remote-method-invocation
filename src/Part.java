@@ -4,15 +4,15 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Part {
-  private String code;
-  private String name;
-  private String description;
-  private Map<String, Part> subPartsList;
+  public String code;
+  public String name;
+  public String description;
+  public Map<String, Integer> subParts;
 
-  public Part(String code, String name, String description, HashMap subPartsList) {
+  public Part(String code, String name, String description, HashMap subParts) {
     this.code = code;
     this.name = name;
     this.description = description;
-    this.subPartsList = subPartsList;
+    this.subParts = subParts;
   }
 }
