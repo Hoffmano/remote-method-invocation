@@ -1,11 +1,11 @@
-import java.net.*;
+//import java.net.*;
 import java.rmi.*;
-import java.rmi.registry.*;
-import java.rmi.server.*;
+//import java.rmi.registry.*;
+//import java.rmi.server.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class Client {
     public static void main(String args[ ]) throws Exception {
@@ -59,6 +59,9 @@ public class Client {
 
                         if (result.equals("Current part set as " + partCode) ) {
                             currentPartCode = partCode;
+                        }
+                        else{
+                            System.out.println("Part not found.");
                         }
                     } catch (Exception e) {
                         System.out.println("Client error");
