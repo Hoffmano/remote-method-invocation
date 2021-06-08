@@ -1,11 +1,11 @@
 import java.rmi.*;
 import java.rmi.server.*;
-import java.rmi.registry.*;
-import java.net.*;
+//import java.rmi.registry.*;
+//import java.net.*;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.io.*;
+//import java.util.ArrayList;
+//import java.io.*;
 
 public class PartRepository extends UnicastRemoteObject implements PartRepositoryInterface {
     private Map<String, Part> parts;
@@ -14,9 +14,9 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
         super();
         this.parts = new HashMap<String, Part>();
 
-        Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, Part>());
-        Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, Part>());
-        Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, Part>());
+        Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, Integer>());
+        Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, Integer>());
+        Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, Integer>());
 
         this.parts.put("p1", part1);
         this.parts.put("p2", part2);
