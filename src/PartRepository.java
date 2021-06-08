@@ -6,13 +6,13 @@ import java.util.HashMap;
 public class PartRepository extends UnicastRemoteObject implements PartRepositoryInterface {
     private Map<String, Part> parts;
 
-    public PartRepository() throws RemoteException{
+    public PartRepository(String serverName) throws RemoteException{
         super();
         this.parts = new HashMap<String, Part>();
 
-        Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, Integer>());
-        Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, Integer>());
-        Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, Integer>());
+        Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, Integer>(), serverName);
+        Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, Integer>(), serverName);
+        Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, Integer>(), serverName);
 
         this.parts.put("p1", part1);
         this.parts.put("p2", part2);
@@ -64,6 +64,7 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
 
         result += "code: " + partCode + "\n";
         result += "name: " + part.name + "\n";
+        result += "server: " + part.serverName + "\n";
         result += "description: " + part.description + "\n";
         result += "sub parts:\n";
         
@@ -79,8 +80,8 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
         return result;
     }
 
-    public String addPart(String code, String name, String description, HashMap<String, Integer> subParts) {
-        this.parts.put(code, new Part(code, name, description, subParts));
+    public String addPart(String code, String name, String description, HashMap<String, Integer> subParts, String serverName) {
+        this.parts.put(code, new Part(code, name, description, subParts, serverName));
         return "";
     }
 }

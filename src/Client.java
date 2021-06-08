@@ -11,6 +11,7 @@ public class Client {
         HashMap<String,Integer> subParts = new HashMap<String,Integer>();
         String currentPartCode = null;
         PartRepositoryInterface partRepository = null;
+        String serverName = "";
 
         try {
             while (true) {
@@ -24,18 +25,18 @@ public class Client {
                 }
 
                 if(input[0].equals("bind")) {
-                    String serverName = "";
-
                     try{
-                    serverName = input[1];
+                        serverName = input[1];
                     }
                     catch(Exception e){
+                        serverName = "";
                         System.out.println("Server name not found");
                     }
 
                     try {
                         partRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + serverName);
                     } catch (Exception e) {
+                        serverName = "";
                         System.out.println("Can't connect to " + serverName);
                     }
                 }
@@ -89,7 +90,7 @@ public class Client {
                     String nome =  attributes[1];
                     String desc = attributes[2];
 
-                    String response = partRepository.addPart(code, nome, desc, subParts);
+                    String response = partRepository.addPart(code, nome, desc, subParts, serverName);
 
                     System.out.println(response);
                 }
