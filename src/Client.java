@@ -52,14 +52,14 @@ public class Client {
                 }
 
                 else if(input[0].equals("subparts")) {
-                    if(input[1].equals("add")) {
+                    if(input.length == 2 && input[1].equals("add")) {
                         subpartsAdd(input[2]);
                     }
-                    else if(input[1].equals("clean")) {
+                    else if(input.length == 2 &&input[1].equals("clean")) {
                         subpartsClean();
                     }
-                    else if(input[1].equals("remove")) {
-                        subpartsRemove();
+                    else if(input.length == 2 && input[1].equals("remove")) {
+                        subpartsRemove(input[2]);
                     }
                     else{
                         subparts();
@@ -137,6 +137,7 @@ public class Client {
 
         try {
             String output = partRepository.addPart(code, nome, desc, subParts);
+            System.out.println(output);
         } catch (Exception e) {
             System.out.println("server error");
         }
@@ -176,12 +177,22 @@ public class Client {
         subParts.clear();
     }
 
-    public static void subpartsRemove() {
-        // TODO Auto-generated method stub
+    public static void subpartsRemove(String codigo) {
+        subParts.remove(codigo);
+        System.out.println(codigo + " removido.");
+        
     }
 
     public static void subparts() {
-        // TODO Auto-generated method stub
+        if(subParts.isEmpty()){
+            System.out.println("Nao ha subpartes.");
+        }
+        for (String subPartCode: subParts.keySet()) {
+            String quantidade = subParts.get(subPartCode).toString();
+            System.out.println(subPartCode + ": " + quantidade);
+            
+        }       
+        
     }
 
 }

@@ -79,4 +79,11 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
 
         return result;
     }
+
+    public String partSubparts(String partCode){
+        String result = "";
+        
+        return result;
+    }
+    
 }
