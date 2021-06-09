@@ -5,10 +5,12 @@ import java.util.HashMap;
 
 public class PartRepository extends UnicastRemoteObject implements PartRepositoryInterface {
     private Map<String, Part> parts;
+    public String serverName;
 
     public PartRepository(String serverName) throws RemoteException{
         super();
         this.parts = new HashMap<String, Part>();
+        this.serverName = serverName;
 
         Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, Integer>(), serverName);
         Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, Integer>(), serverName);
@@ -26,35 +28,18 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
             result += partCode + "\n";
         }
 
-        return result;
+        return result.trim();
     }
 
     public String getPart(String partCode) {
-        Part part = null;
-        String result = "";
-
         try {
-            System.out.println(this.parts);
-            System.out.println(partCode);
-            part = this.parts.get(partCode);
-
-            result += "code: " + partCode + "\n";
-            result += "name: " + part.name + "\n";
-            result += "description: " + part.description + "\n";
-            result += "sub parts:\n";
-            
-            for (String subPartCode : part.subParts.keySet()) {
-                String quantity = part.subParts.get(subPartCode).toString();
-                result += "  - " + quantity + "x " + subPartCode + "\n";
+            Part part = this.parts.get(partCode);
+            if (part != null) {
+                return "success";
             }
-
-            if (part.subParts.isEmpty()) {
-                result += "  - This is a primitive part";
-            }
-
-            return "Current part set as " + partCode;
+            return "this part was not found in this part repository";
         } catch (Exception e) {
-            return "This part was not found in this part repository\n" + e.getMessage();
+            return "this part was not found in this part repository";
         }
     }
 
@@ -74,14 +59,24 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
         }
 
         if (part.subParts.isEmpty()) {
-            result += "  - This is a primitive part";
+            result += "  - this is a primitive part";
         }
 
-        return result;
+        return result.trim();
     }
 
-    public String addPart(String code, String name, String description, HashMap<String, Integer> subParts, String serverName) {
+    public String addPart(String code, String name, String description, HashMap<String, Integer> subParts) {
         this.parts.put(code, new Part(code, name, description, subParts, serverName));
         return "";
+    }
+
+    public String repo() {
+        String result = "";
+        Integer quantityOfParts = this.parts.size();
+
+        result += "repository name: " + serverName + "\n";
+        result += "quantity of parts: " + quantityOfParts;
+
+        return result;
     }
 }
