@@ -130,7 +130,7 @@ public class Client {
         String nome =  attributes[1];
         String desc = attributes[2];
 
-        if(serverName.equals(""){
+        if(serverName.equals("")){
             System.out.println("you should bind to one repository");
             return;
         }
