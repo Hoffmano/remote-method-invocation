@@ -7,7 +7,7 @@ public class Client {
     public static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
     public static BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
     public static String[] input = {""};
-    public static HashMap<String,Integer> subParts = new HashMap<String,Integer>();
+    public static HashMap<String,String> subParts = new HashMap<String,String>();
     public static String currentPartCode = null;
     public static PartRepositoryInterface partRepository = null;
     public static String serverName = "";
@@ -52,7 +52,7 @@ public class Client {
                 }
 
                 else if(input[0].equals("subparts")) {
-                    if(input.length == 2 && input[1].equals("add")) {
+                    if(input.length == 3 && input[1].equals("add")) {
                         subpartsAdd(input[2]);
                     }
                     else if(input.length == 2 &&input[1].equals("clean")) {
@@ -136,15 +136,54 @@ public class Client {
         }
 
         try {
-            String output = partRepository.addPart(code, nome, desc, subParts);
-            System.out.println(output);
+            partRepository.addPart(code, nome, desc, subParts);
         } catch (Exception e) {
             System.out.println("server error");
         }
     }
 
     public static void partSubparts() {
-        // TODO Auto-generated method stub
+        if (currentPartCode.equals("")) {
+            System.out.println("you should select one part");
+        }
+
+        String part = "";
+
+        try {
+            part = partRepository.showPartAttributes(currentPartCode);
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+
+        String[] partDetails = part.split(System.getProperty("line.separator"));
+        String output = "";
+
+        for (int i = 5; i < partDetails.length; i++) {
+            String[] subpart = partDetails[i].split(" ");
+            String subpartCode = subpart[4];
+            String server = subpart[6];
+
+            PartRepositoryInterface subpartRepository = null;
+
+            try {
+                subpartRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + server);
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+
+            try {
+                output += "- code: " + subpartCode + "\n";
+                String[] subpartAttributes = subpartRepository.showPartAttributes(subpartCode).split(System.getProperty("line.separator"));
+
+                for (int j = 1; j < subpartAttributes.length; j++) {
+                    output += "  " + subpartAttributes[j]  + "\n";
+                }
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
+        }
+
+        System.out.println(output.trim());
     }
 
     public static void part() {
@@ -159,16 +198,17 @@ public class Client {
         }
     }
 
-    public static void subpartsAdd(String input) {
-        Integer quantity = Integer.valueOf(input);
+    public static void subpartsAdd(String quantity) {
+        Integer quantity_integer = Integer.parseInt(quantity);
+        String infos = quantity + " " + serverName;
 
-        if (!currentPartCode.equals("") && quantity > 0) {
-            subParts.put(currentPartCode, quantity);
+        if (!currentPartCode.equals("") && quantity_integer > 0) {
+            subParts.put(currentPartCode, infos);
         }
         else if(currentPartCode == null) {
             System.out.println("you should selected one part");
         }
-        else if(quantity == 0) {
+        else if(quantity_integer == 0) {
             System.out.println("quantity should be at least one");
         }
     }
@@ -177,22 +217,17 @@ public class Client {
         subParts.clear();
     }
 
-    public static void subpartsRemove(String codigo) {
-        subParts.remove(codigo);
-        System.out.println(codigo + " removido.");
-        
+    public static void subpartsRemove(String partCode) {
+        subParts.remove(partCode);
     }
 
     public static void subparts() {
         if(subParts.isEmpty()){
-            System.out.println("Nao ha subpartes.");
+            System.out.println("subparts list is empty");
         }
-        for (String subPartCode: subParts.keySet()) {
-            String quantidade = subParts.get(subPartCode).toString();
-            System.out.println(subPartCode + ": " + quantidade);
-            
-        }       
-        
+        for (String partCode: subParts.keySet()) {
+            String[] infos = subParts.get(partCode).split(" ");
+            System.out.println("- " + infos[0] + "x " + partCode + " from " + infos[1]);
+        }
     }
-
 }

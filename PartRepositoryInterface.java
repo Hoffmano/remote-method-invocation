@@ -6,6 +6,6 @@ public interface PartRepositoryInterface extends Remote {
     String repo() throws RemoteException;
     String getPart(String partCode) throws RemoteException;
     String showPartAttributes(String partCode) throws RemoteException;
-    String addPart(String code, String name, String description, HashMap<String, Integer> subParts) throws RemoteException;
+    String addPart(String code, String name, String description, HashMap<String, String> subParts) throws RemoteException;
     
 }
