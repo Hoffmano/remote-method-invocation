@@ -1,3 +1,15 @@
+/* ------------------------------------------------------------------------------------------------------------
+                                        Exercicio Programa 1 - DSID
+
+Feito Por:
+- Caio Rodrigues Gomes              - 11208012
+- Eric Batista da Silva             - 10783114
+- Gabriel Hoffman Silva             - 10783250
+- Julia Cristina de Brito Passos    - 10723840
+
+    Esta classe e responsavel por implementar o repositorio de pecas, que por sua vez, e responsavel por
+armazenar as pecas e retornar uma copia quando solicitado pelo cliente.
+------------------------------------------------------------------------------------------------------------ */
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.Map;
@@ -7,6 +19,8 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
     private Map<String, Part> parts;
     public String serverName;
 
+    //Construtor padrao do repositorio de pecas
+    //OBS: O repositorio e sempre inicializado com 3 pecas exemplo
     public PartRepository(String serverName) throws RemoteException{
         super();
         this.parts = new HashMap<String, Part>();
@@ -21,7 +35,9 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
         this.parts.put("p3", part3);
     }
 
+    //Comando responsavel por listar as partes presentes no repositorio
     public String listParts() {
+        System.out.println("Command: listParts");
         String result = "";
 
         for (String partCode : this.parts.keySet()) {
@@ -31,46 +47,29 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
         return result.trim();
     }
 
-    public String getPart(String partCode) {
-        try {
-            Part part = this.parts.get(partCode);
-            if (part != null) {
-                return "success";
-            }
-            return "this part was not found in this part repository";
-        } catch (Exception e) {
-            return "this part was not found in this part repository";
-        }
-    }
-
-    public String showPartAttributes(String partCode) {
+    //Comando responsavel por retornar um objeto da parte
+    public Part getPart(String partCode) {
+        System.out.println("Command: getPart");
+        System.out.println("Param: " + partCode);
         Part part = this.parts.get(partCode);
-        String result = "";
-
-        result += "code: " + partCode + "\n";
-        result += "name: " + part.name + "\n";
-        result += "server: " + part.serverName + "\n";
-        result += "description: " + part.description + "\n";
-        result += "sub parts:\n";
+        if (part == null) {
+            throw new RuntimeException("Part not found");
+        }
+        return part;
         
-        for (String subPartCode: part.subParts.keySet()) {
-            String[] infos = part.subParts.get(subPartCode).split(" ");
-            result += "  - " + infos[0] + "x " + subPartCode + " from " + infos[1] + "\n";
-        }
-
-        if (part.subParts.isEmpty()) {
-            result += "  - this is a primitive part";
-        }
-
-        return result.trim();
     }
 
+    //Metodo responsavel por adicionar novas partes ao repositorio
     public String addPart(String code, String name, String description, HashMap<String, String> subParts) {
+        System.out.println("Command: addPart");
+        System.out.println("Param: " + code + " , " + name + " , " + description);
         this.parts.put(code, new Part(code, name, description, subParts, serverName));
         return "";
     }
 
+    //Metodo responsavel por listar todas as pecas presentes no repo
     public String repo() {
+        System.out.println("Command: repo");
         String result = "";
         Integer quantityOfParts = this.parts.size();
 

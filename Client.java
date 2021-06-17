@@ -1,17 +1,38 @@
+/* ------------------------------------------------------------------------------------------------------------
+                                        Exercicio Programa 1 - DSID
+
+Feito Por:
+- Caio Rodrigues Gomes              - 11208012
+- Eric Batista da Silva             - 10783114
+- Gabriel Hoffman Silva             - 10783250
+- Julia Cristina de Brito Passos    - 10723840
+
+    Esta classe e responsavel por implementar toda a interface do cliente no console, permitindo que o usuario
+manipule os repositorios de partes.
+------------------------------------------------------------------------------------------------------------ */
+
 import java.rmi.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
 public class Client {
+    //Variaveis utilizadas para ler a entrada do usuario
     public static InputStreamReader inputStreamReader = new InputStreamReader(System.in);
     public static BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
     public static String[] input = {""};
+
+    //Conjunto de subpartes
     public static HashMap<String,String> subParts = new HashMap<String,String>();
-    public static String currentPartCode = null;
+
+    //Variaveis utilizadas para contectar aos repositorios
     public static PartRepositoryInterface partRepository = null;
     public static String serverName = "";
 
+    //Parte selecionada pelo usuario
+    private static Part currentPart;
+
+    //Metodo main captura os comandos inseridos pelo usuario no console
     public static void main(String args[ ]) throws Exception {
         try {
             while (true) {
@@ -43,9 +64,6 @@ public class Client {
                     else if(input.length > 2 && input[1].equals("add")) {
                         partAdd(rawInput);
                     }
-                    else if(input.length == 2 && input[1].equals("subparts")) {
-                        partSubparts();
-                    }
                     else if (input.length == 1) {
                         part();
                     }
@@ -67,163 +85,133 @@ public class Client {
                 }
 
                 else {
-                    System.out.println("this command was not recognized");
+                    System.out.println("Error: This command was not recognized");
                 }
             }
         } catch(Exception e) {
-            System.out.println("client error");
+            System.out.println("Client Error:");
             System.out.println(e);
         }
 
         System.exit(0);
     }
 
+    //Metodo responsavel por conectar ao servidor do repositorio
     public static void repoBind(String[] input, String rawInput) {
+        //Verificacao se o input e maior que o tamanho limite
         if (input.length != 3) {
-            System.out.println("expected command: repo bind <server-name>\nreceived command: " + rawInput);
+            System.out.println("Error: Expected command: repo bind <server-name>\nreceived command: " + rawInput);
         }
         else {
+            //Obtendo o nome do servidor
             serverName = input[2];
             try {
+                //Conectando ao servidor
                 partRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + serverName);
             } catch (Exception e) {
                 serverName = "";
-                System.out.println("can't connect to " + serverName);
+                System.out.println("Error: Can't connect to " + serverName);
             }
         }
     }
 
+    //Metodo responsavel por solicitar ao servidor a lista de partes
     public static void repoParts() {
         try {
             System.out.println(partRepository.listParts());
         } catch (Exception e) {
-            System.out.println("server error");
+            System.out.println("Server error:");
+            System.out.println(e);
         }
     }
 
+    //Metodo responsavel por solicitar ao servidor a quantidade de pecas presente
     public static void repo() {
         try {
             System.out.println(partRepository.repo());
         } catch (Exception e) {
-            System.out.println("server error");
+            System.out.println("Server error:");
+            System.out.println(e);
         }
     }
 
+    //Metodo responsavel por obter uma copia de uma peca no servidor, para ser usado posteriormente no comando subparts
     public static void partGet(String partCode) {
         try {
-            String output = partRepository.getPart(partCode);
+            currentPart = partRepository.getPart(partCode);
 
-            if (output.equals("success") ) {
-                currentPartCode = partCode;
-            }
-            else{
-                System.out.println(output);
-            }
         } catch (Exception e) {
-            System.out.println("server error");
+            System.out.println("Server error:");
+            System.out.println(e);
+            
         }
     }
 
+    //Metodo responsavel por adicionar uma nova parte ao repositorio atual
     public static void partAdd(String rawInput) {
         String[] attributes = rawInput.split(", ");
         String code = attributes[0].split(" ")[2];
         String nome =  attributes[1];
         String desc = attributes[2];
 
+        //Verificacao se o cliente esta conectado ao servidor
         if(serverName.equals("")){
-            System.out.println("you should bind to one repository");
+            System.out.println("Error: You should bind to one repository");
             return;
         }
 
         try {
             partRepository.addPart(code, nome, desc, subParts);
         } catch (Exception e) {
-            System.out.println("server error");
+            System.out.println("Server error:");
+            System.out.println(e);
         }
     }
 
-    public static void partSubparts() {
-        if (currentPartCode.equals("")) {
-            System.out.println("you should select one part");
-        }
-
-        String part = "";
-
-        try {
-            part = partRepository.showPartAttributes(currentPartCode);
-        } catch (Exception e) {
-            //TODO: handle exception
-        }
-
-        String[] partDetails = part.split(System.getProperty("line.separator"));
-        String output = "";
-
-        for (int i = 5; i < partDetails.length; i++) {
-            String[] subpart = partDetails[i].split(" ");
-            String subpartCode = subpart[4];
-            String server = subpart[6];
-
-            PartRepositoryInterface subpartRepository = null;
-
-            try {
-                subpartRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + server);
-            } catch (Exception e) {
-                //TODO: handle exception
-            }
-
-            try {
-                output += "- code: " + subpartCode + "\n";
-                String[] subpartAttributes = subpartRepository.showPartAttributes(subpartCode).split(System.getProperty("line.separator"));
-
-                for (int j = 1; j < subpartAttributes.length; j++) {
-                    output += "  " + subpartAttributes[j]  + "\n";
-                }
-            } catch (Exception e) {
-                //TODO: handle exception
-            }
-        }
-
-        System.out.println(output.trim());
-    }
-
+    //Comando responsavel por imprimir a parte selecionada
     public static void part() {
         try {
-            if (currentPartCode.equals("")) {
-                System.out.println("no part is selected");
+            if (currentPart == null) {
+                System.out.println("Error: No part is selected");
                 return;
             }
-            System.out.println(partRepository.showPartAttributes(currentPartCode));
+            System.out.println(currentPart);
         } catch (Exception e) {
-            System.out.println("server error");
+            System.out.println("Server error:");
+            System.out.println(e);
         }
     }
 
+    //Comando responsável por adicionar subpartes a lista de subpartes
     public static void subpartsAdd(String quantity) {
         Integer quantity_integer = Integer.parseInt(quantity);
-        String infos = quantity + " " + serverName;
+        String infos = quantity + " " + currentPart.getServerName();
 
-        if (!currentPartCode.equals("") && quantity_integer > 0) {
-            subParts.put(currentPartCode, infos);
+        if (currentPart != null && quantity_integer > 0) {
+            subParts.put(currentPart.getCode(), infos);
         }
-        else if(currentPartCode == null) {
-            System.out.println("you should selected one part");
+        else if(currentPart == null) {
+            System.out.println("Error: You should selected one part");
         }
-        else if(quantity_integer == 0) {
-            System.out.println("quantity should be at least one");
+        else if(quantity_integer <= 0) {
+            System.out.println("Error: Quantity should be at least one");
         }
     }
 
+    //Metodo responsavel por limpar a lista de subpartes
     public static void subpartsClean() {
         subParts.clear();
     }
 
+    //Metodo responsavel por remover uma parte da lista de subpartes
     public static void subpartsRemove(String partCode) {
         subParts.remove(partCode);
     }
 
+    //Metodo responsavel por exibir a lista de subpartes
     public static void subparts() {
         if(subParts.isEmpty()){
-            System.out.println("subparts list is empty");
+            System.out.println("Error: Subparts list is empty");
         }
         for (String partCode: subParts.keySet()) {
             String[] infos = subParts.get(partCode).split(" ");

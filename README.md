@@ -1,5 +1,12 @@
 # Remote Method Implementation
 
+# Feito Por:
+
+- Caio Rodrigues Gomes  - 11208012
+- Eric Batista da Silva - 10783114
+- Gabriel Hoffman Silva - 10783250
+- Júlia Cristina de Brito Passos - 10723840
+
 # Sobre o escopo do projeto
 
 Basicamente a proposta do projeto era a elaboração de um sistema de informação simples sobre peças usando RMI de Java.
@@ -79,22 +86,29 @@ Comandos relacionados a lista de subpeças:
 
     `git clone https://github.com/Hoffmano/remote-method-invocation.git`
 
-2. Caso você esteja no linux rode o seguinte comando:
+2. Vá para a pasta do repositório clonado e execute um dos seguintes comandos:
+- Caso você esteja no linux rode o seguinte comando:
 
     `rmiregistry &`
 
-3. Se estiver no Windows rode o seguinte comando:
+- Se estiver no Windows rode o seguinte comando:
 
     `start rmiregistry`
 
-4. Abra um novo terminal
-5. Vá para a pasta do repositório clonado
-6. Execute o comando `javac *.java`
-7. Execute o comando `java Server <serverName>` substituindo \<serverName> com o nome desejado para o seu repositório
-8. Repita a partir do passo 4 para criar novos repositórios
-9. Abra um novo terminal
-10. Vá para a pasta do repositório clonado
-11. Execute o comando `java Client`
-12. Execute qualquer um dos comandos especificados pela nossa CLI
+3. Abra um novo terminal
+4. Vá para a pasta do repositório clonado
+5. Execute o comando `javac *.java`
+6. Execute o comando `java Server <serverName>` substituindo \<serverName> com o nome desejado para o seu repositório
+7. Repita a partir do passo 4 para criar novos repositórios
+8. Abra um novo terminal
+9. Vá para a pasta do repositório clonado
+10. Execute o comando `java Client`
+11. Execute qualquer um dos comandos especificados pela nossa CLI
 
 # Caso de uso
+
+
+
+
+# Arquitetura
+
