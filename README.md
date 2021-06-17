@@ -87,11 +87,11 @@ Comandos relacionados a lista de subpeças:
     `git clone https://github.com/Hoffmano/remote-method-invocation.git`
 
 2. Vá para a pasta do repositório clonado e execute um dos seguintes comandos:
-- Caso você esteja no linux rode o seguinte comando:
+    1. Caso você esteja no linux rode o seguinte comando:
 
     `rmiregistry &`
 
-- Se estiver no Windows rode o seguinte comando:
+    2. Se estiver no Windows rode o seguinte comando:
 
     `start rmiregistry`
 
