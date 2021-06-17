@@ -59,11 +59,15 @@ public class Part implements Serializable  {
     result += "Description: " + this.description + "\n";
     result += "Sub parts:\n";
         
-    for (String subPartCode: this.subParts.keySet()) {
-      String[] infos = this.subParts.get(subPartCode).split(" ");
-      result += "  - " + infos[0] + "x " + subPartCode + " from " + infos[1] + "\n";
+    if(subParts.isEmpty()){
+      result += "  - This is a primary Part";
     }
-
+    else{
+      for (String subPartCode: this.subParts.keySet()) {
+        String[] infos = this.subParts.get(subPartCode).split(" ");
+        result += "  - " + infos[0] + "x " + subPartCode + " from " + infos[1] + "\n";
+      }
+    }
     return result;  
   }
 
