@@ -108,9 +108,12 @@ public class Client {
             try {
                 //Conectando ao servidor
                 partRepository = (PartRepositoryInterface)Naming.lookup("rmi://localhost/" + serverName);
-            } catch (Exception e) {
-                serverName = "";
+                if( partRepository == null){
+                    throw  new RuntimeException("Server not found");
+                }
+            } catch (Exception e) {    
                 System.out.println("Error: Can't connect to " + serverName);
+                serverName = "";
             }
         }
     }
