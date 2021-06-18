@@ -52,6 +52,9 @@ public class Client {
                     else if(input.length == 2 && input[1].equals("parts")) {
                         repoParts();
                     }
+                    else if(input.length == 2 && input[1].equals("populate")) {
+                        repoPopulate();
+                    }
                     else if(input.length == 1) {
                         repo();
                     }
@@ -122,6 +125,16 @@ public class Client {
     public static void repoParts() {
         try {
             System.out.println(partRepository.listParts());
+        } catch (Exception e) {
+            System.out.println("Server error:");
+            System.out.println(e);
+        }
+    }
+
+    //Metodo responsavel por solicitar ao servidor a lista de partes
+    public static void repoPopulate() {
+        try {
+            partRepository.populate();
         } catch (Exception e) {
             System.out.println("Server error:");
             System.out.println(e);

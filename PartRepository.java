@@ -18,21 +18,30 @@ import java.util.HashMap;
 public class PartRepository extends UnicastRemoteObject implements PartRepositoryInterface {
     private Map<String, Part> parts;
     public String serverName;
+    private boolean alreadyPopulated = false;
 
     //Construtor padrao do repositorio de pecas
-    //OBS: O repositorio e sempre inicializado com 3 pecas exemplo
     public PartRepository(String serverName) throws RemoteException{
         super();
         this.parts = new HashMap<String, Part>();
         this.serverName = serverName;
 
-        Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, String>(), serverName);
-        Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, String>(), serverName);
-        Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, String>(), serverName);
+    }
 
-        this.parts.put("p1", part1);
-        this.parts.put("p2", part2);
-        this.parts.put("p3", part3);
+    //Comando responsavel por popular o repositorio com pecas exemplo
+    public void populate(){
+        if(!alreadyPopulated){
+            alreadyPopulated = true;
+            Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, String>(), serverName);
+            Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, String>(), serverName);
+            Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, String>(), serverName);
+
+            this.parts.put("p1", part1);
+            this.parts.put("p2", part2);
+            this.parts.put("p3", part3);
+        } else {
+            throw new RuntimeException("Error: Repository already populated");
+        }
     }
 
     //Comando responsavel por listar as partes presentes no repositorio

@@ -13,6 +13,7 @@ import java.rmi.*;
 import java.util.HashMap;
 
 public interface PartRepositoryInterface extends Remote {
+    void populate() throws RemoteException;
     String listParts() throws RemoteException;
     String repo() throws RemoteException;
     Part getPart(String partCode) throws RemoteException;

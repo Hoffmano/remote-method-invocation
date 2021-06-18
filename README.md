@@ -57,6 +57,8 @@ Comandos relacionados ao repositório:
   - Conecta o cliente com um determinado repositório
 - `repo parts`
   - Lista os códigos das peças presentes no repositório corrente
+- `repo populate`
+  - Popula o repositório corrente com 3 peças simples
 - `repo`
   - Mostra dados e estatísticas do repositório corrente
 
