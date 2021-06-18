@@ -76,7 +76,7 @@ public class Client {
                     else if(input.length == 2 &&input[1].equals("clean")) {
                         subpartsClean();
                     }
-                    else if(input.length == 2 && input[1].equals("remove")) {
+                    else if(input.length == 3 && input[1].equals("remove")) {
                         subpartsRemove(input[2]);
                     }
                     else{
