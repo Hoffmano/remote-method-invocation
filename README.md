@@ -59,6 +59,8 @@ Comandos relacionados ao repositório:
   - Lista os códigos das peças presentes no repositório corrente
 - `repo populate`
   - Popula o repositório corrente com 3 peças simples
+- `repo help`
+  - Exibe os comandos disponiveis
 - `repo`
   - Mostra dados e estatísticas do repositório corrente
 
@@ -68,6 +70,14 @@ Comandos relacionados as peças:
   - Busca uma determinada peça no repositório corrente e caso encontre, a torna a peça corrente
 - ``part add \<partCode>, \<partName>, \<partDescription>``
   - Adiciona uma nova peça no repositório corrente
+- ``part subparts``
+  - Lista as subpartes presentes na peca corrente
+- ``part name``
+  - Exibe o nome da peca corrente  
+- ``part description``
+  - Exibe a descrição da peca corrente  
+- ``part help``
+  - Exibe os comandos disponiveis    
 - ``part``
   - Mostra os dados da peça corrente
 
@@ -79,6 +89,8 @@ Comandos relacionados a lista de subpeças:
   - Limpa a lista de subpeças
 - ``subparts remove \<partCode>``
   - Remove uma determinada peça da lista de subpeças
+- `subparts help`
+  - Limpa a lista de subpeças
 - ``subparts``
   - Lista todas as peças presentes na lista de subpeças
 

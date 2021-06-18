@@ -12,6 +12,7 @@ armazenar as pecas e retornar uma copia quando solicitado pelo cliente.
 ------------------------------------------------------------------------------------------------------------ */
 import java.rmi.*;
 import java.rmi.server.*;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -30,11 +31,13 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
 
     //Comando responsavel por popular o repositorio com pecas exemplo
     public void populate(){
+        System.out.println("Command: getPart");
+        System.out.println("Is populated: " + alreadyPopulated);
         if(!alreadyPopulated){
             alreadyPopulated = true;
-            Part part1 = new Part("p1", "part 1", "description part 1", new HashMap<String, String>(), serverName);
-            Part part2 = new Part("p2", "part 2", "description part 2", new HashMap<String, String>(), serverName);
-            Part part3 = new Part("p3", "part 3", "description part 3", new HashMap<String, String>(), serverName);
+            Part part1 = new Part("p1", "part 1", "description part 1", serverName);
+            Part part2 = new Part("p2", "part 2", "description part 2", serverName);
+            Part part3 = new Part("p3", "part 3", "description part 3", serverName);
 
             this.parts.put("p1", part1);
             this.parts.put("p2", part2);
@@ -69,10 +72,12 @@ public class PartRepository extends UnicastRemoteObject implements PartRepositor
     }
 
     //Metodo responsavel por adicionar novas partes ao repositorio
-    public String addPart(String code, String name, String description, HashMap<String, String> subParts) {
+    public String addPart(String code, String name, String description, LinkedList<Part> subParts) {
         System.out.println("Command: addPart");
         System.out.println("Param: " + code + " , " + name + " , " + description);
-        this.parts.put(code, new Part(code, name, description, subParts, serverName));
+        Part newPart = new Part(code, name, description, serverName);
+        newPart.setSubParts(subParts);
+        this.parts.put(code, newPart);
         return "";
     }
 

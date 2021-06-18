@@ -11,12 +11,13 @@ Feito Por:
 ------------------------------------------------------------------------------------------------------------ */
 import java.rmi.*;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public interface PartRepositoryInterface extends Remote {
     void populate() throws RemoteException;
     String listParts() throws RemoteException;
     String repo() throws RemoteException;
     Part getPart(String partCode) throws RemoteException;
-    String addPart(String code, String name, String description, HashMap<String, String> subParts) throws RemoteException;
+    String addPart(String code, String name, String description, LinkedList<Part> subParts) throws RemoteException;
     
 }
