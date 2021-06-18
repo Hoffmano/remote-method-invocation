@@ -90,7 +90,7 @@ Comandos relacionados a lista de subpeças:
 - ``subparts remove \<partCode>``
   - Remove uma determinada peça da lista de subpeças
 - `subparts help`
-  - Limpa a lista de subpeças
+  - Exibe os comandos disponiveis 
 - ``subparts``
   - Lista todas as peças presentes na lista de subpeças
 
