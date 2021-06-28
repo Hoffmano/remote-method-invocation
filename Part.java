@@ -9,10 +9,7 @@ Feito Por:
 
   Essa classe e responsavel por implementar o objeto da peca.
 ------------------------------------------------------------------------------------------------------------ */
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.Map;
-import java.util.HashMap;
 import java.io.Serializable;
 
 public class Part implements Serializable  {

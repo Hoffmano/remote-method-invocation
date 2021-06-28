@@ -10,7 +10,6 @@ Feito Por:
     Interface do repositorio de partes.
 ------------------------------------------------------------------------------------------------------------ */
 import java.rmi.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public interface PartRepositoryInterface extends Remote {

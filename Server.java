@@ -17,6 +17,7 @@ public class Server {
         try {
             PartRepository partRepository = new PartRepository(args[0]);
             Naming.rebind(args[0], partRepository);
+            partRepository.populate();
 
             System.out.println(args[0] + " is ready");
         } catch(Exception e) {
