@@ -249,10 +249,10 @@ public class Client {
 
     //Comando responsável por adicionar subpartes a lista de subpartes
     public static void subpartsAdd(String quantity) {
-        Integer quantity_integer = Integer.parseInt(quantity);
-        String infos = quantity + " " + currentPart.getServerName();
+        Integer quantity_integer = Integer.parseInt(quantity);        
 
         if (currentPart != null && quantity_integer > 0) {
+            String infos = quantity + " " + currentPart.getServerName();
             Part addedPart = currentPart;
             addedPart.setNumber(quantity_integer);
             subParts.add(addedPart);
